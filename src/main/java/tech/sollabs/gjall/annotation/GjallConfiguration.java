@@ -7,6 +7,10 @@ import tech.sollabs.gjall.GjallConfigurerAdapter;
 import tech.sollabs.gjall.GjallRequestLoggingFilter;
 import tech.sollabs.gjall.configurer.GjallConfigurer;
 import tech.sollabs.gjall.configurer.GjallConfigurerBuilder;
+import tech.sollabs.gjall.handlers.SimpleGjallAfterRequestHandler;
+import tech.sollabs.gjall.handlers.SimpleGjallBeforeRequestHandler;
+import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
+import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
 
 import javax.annotation.PostConstruct;
 
@@ -14,6 +18,8 @@ import javax.annotation.PostConstruct;
 public class GjallConfiguration {
 
     private GjallConfigurerAdapter configurerAdapter;
+    private GjallBeforeRequestHandler beforeRequestHandler = new SimpleGjallBeforeRequestHandler();
+    private GjallAfterRequestHandler afterRequestHandler = new SimpleGjallAfterRequestHandler();
 
     @PostConstruct
     public void init() {
@@ -32,13 +38,26 @@ public class GjallConfiguration {
 
     @Bean
     public GjallConfigurerBuilder gjallConfigurerBuilder() {
-        GjallConfigurerBuilder builder = new GjallConfigurerBuilder();
-        builder.setGjallConfigurer(gjallConfigurer());
-        return builder;
+        GjallConfigurerBuilder configurerBuilder = new GjallConfigurerBuilder(gjallConfigurer());
+
+        configurerBuilder.beforeHandler(beforeRequestHandler);
+        configurerBuilder.afterHandler(afterRequestHandler);
+
+        return configurerBuilder;
     }
 
     @Autowired(required = false)
     public void setConfigurerAdapter(GjallConfigurerAdapter configurerAdapter) {
         this.configurerAdapter = configurerAdapter;
+    }
+
+    @Autowired(required = false)
+    public void setBeforeRequestHandler(GjallBeforeRequestHandler beforeRequestHandler) {
+        this.beforeRequestHandler = beforeRequestHandler;
+    }
+
+    @Autowired(required = false)
+    public void setAfterRequestHandler(GjallAfterRequestHandler afterRequestHandler) {
+        this.afterRequestHandler = afterRequestHandler;
     }
 }

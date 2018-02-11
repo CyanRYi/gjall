@@ -11,6 +11,10 @@ public class GjallConfigurerBuilder {
     private GjallRequestConfigurer requestConfigurer = null;
     private GjallResponseConfigurer responseConfigurer = null;
 
+    public GjallConfigurerBuilder(GjallConfigurer gjallConfigurer) {
+        this.gjallConfigurer = gjallConfigurer;
+    }
+
     public GjallConfigurerBuilder includeQueryString(boolean includeQueryString) {
         gjallConfigurer.setIncludeQueryString(includeQueryString);
         return this;
@@ -88,9 +92,5 @@ public class GjallConfigurerBuilder {
         public GjallConfigurerBuilder and() {
             return GjallConfigurerBuilder.this;
         }
-    }
-
-    public void setGjallConfigurer(GjallConfigurer gjallConfigurer) {
-        this.gjallConfigurer = gjallConfigurer;
     }
 }

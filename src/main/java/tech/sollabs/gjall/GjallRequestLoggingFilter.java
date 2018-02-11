@@ -1,7 +1,7 @@
 package tech.sollabs.gjall;
 
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.server.ServletServerHttpRequest;
-import org.springframework.http.server.ServletServerHttpResponse;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
@@ -47,11 +47,10 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         HttpServletResponse responseToUse = response;
 
         if (isFirstRequest && configurer.isIncludeRequestPayload() && !(request instanceof ContentCachingRequestWrapper)) {
-            requestToUse = new ContentCachingRequestWrapper(request, getMaxPayloadLength());
+            requestToUse = new ContentCachingRequestWrapper(request, configurer.getRequestPayloadLoggingSize());
         }
 
-        if (isFirstRequest && configurer.isIncludeResponseLog()
-                && configurer.isIncludeResponsePayload() && !(response instanceof ContentCachingResponseWrapper)) {
+        if (isFirstRequest && configurer.isIncludeResponseLog() && !(response instanceof ContentCachingResponseWrapper)) {
             responseToUse = new ContentCachingResponseWrapper(response);
         }
 
@@ -63,11 +62,11 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
             beforeRequest(requestToUse, apiLog);
         }
         try {
-            filterChain.doFilter(requestToUse, response);
+            filterChain.doFilter(requestToUse, responseToUse);
         }
         finally {
-            if (configurer.isIncludeResponseLog() && !isAsyncStarted(requestToUse)) {
-                apiLog = getAfterMessage(responseToUse, apiLog);
+            if (configurer.isEnabledAfterLog() && !isAsyncStarted(requestToUse)) {
+                apiLog = getAfterMessage(requestToUse, responseToUse, apiLog);
                 afterRequest(requestToUse, responseToUse, apiLog);
             }
         }
@@ -106,42 +105,48 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
             }
         }
 
+        return apiLog;
+    }
+
+    private ApiLog getAfterMessage(HttpServletRequest request, HttpServletResponse response, ApiLog apiLog) throws IOException {
+
         if (configurer.isIncludeRequestPayload()) {
-            ContentCachingRequestWrapper wrapper =
+            ContentCachingRequestWrapper requestWrapper =
                     WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
-            if (wrapper != null) {
-                byte[] buf = wrapper.getContentAsByteArray();
+
+            if (requestWrapper != null) {
+                byte[] buf = requestWrapper.getContentAsByteArray();
 
                 String payload = this.writeBufferAsString(
-                        buf, wrapper.getCharacterEncoding(), configurer.getRequestPayloadLoggingSize());
+                        buf, requestWrapper.getCharacterEncoding(), configurer.getRequestPayloadLoggingSize());
 
                 apiLog.setRequestBody(payload);
             }
         }
 
-        return apiLog;
-    }
-
-    private ApiLog getAfterMessage(HttpServletResponse response, ApiLog beForeApiLog) {
-
-        ApiLog apiLog = beForeApiLog;
-
-        ContentCachingResponseWrapper wrapper =
+        ContentCachingResponseWrapper responseWrapper =
                 WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
 
-        apiLog.setHttpStatus(wrapper.getStatusCode());
+        apiLog.setHttpStatus(responseWrapper.getStatusCode());
 
         if (configurer.isIncludeResponseHeaders()) {
-            apiLog.setRequestHeader(new ServletServerHttpResponse(response).getHeaders().toString());
+            HttpHeaders responseHeaders = new HttpHeaders();
+            for (String headerName : responseWrapper.getHeaderNames()) {
+                responseHeaders.add(headerName, responseWrapper.getHeader(headerName));
+            }
+            apiLog.setResponseHeader(responseHeaders.toString());
         }
 
         if (configurer.isIncludeResponsePayload()) {
-            byte[] buf = wrapper.getContentAsByteArray();
+
+            byte[] buf = responseWrapper.getContentAsByteArray();
 
             String payload = this.writeBufferAsString(
-                    buf, wrapper.getCharacterEncoding(), configurer.getResponsePayloadLoggingSize());
+                    buf, responseWrapper.getCharacterEncoding(), configurer.getResponsePayloadLoggingSize());
 
             apiLog.setResponseBody(payload);
+
+            responseWrapper.copyBodyToResponse();
         }
 
         return apiLog;
@@ -159,10 +164,16 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 payload = "[unknown]";
             }
 
-            return payload;
+            return replaceEscapeWords(payload);
         }
 
         return null;
+    }
+
+    private String replaceEscapeWords(String payload) {
+        return payload.replaceAll("\n", "")
+                .replaceAll("\r", "")
+                .replaceAll("\t", "");
     }
 
     private String createRequestLogId() {
