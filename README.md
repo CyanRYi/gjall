@@ -5,7 +5,7 @@ Gjall(_Gjallarhorn_) name stemmed from the Norse Mythology. - [wikipedia](https:
 ## Requirement
 
 * spring-web : 4.3.6-RELEASE
-* servlet-api : 3.0
+* servlet-api : 3.0.1
 
 API Logging is a important issue in modern web environment reasons below.
 * communicate with front-end developers more easier
