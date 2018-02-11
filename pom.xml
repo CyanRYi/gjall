@@ -8,6 +8,15 @@
     <artifactId>gjall</artifactId>
     <version>0.1.0-SNAPSHOT</version>
 
+    <name>gjall</name>
+    <description>Spring Extension 2nd Series. API Logging</description>
+    <url>https://gjall.sollabs.tech</url>
+
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
+
+
     <dependencies>
         <dependency>
             <groupId>org.springframework</groupId>
