@@ -14,8 +14,10 @@ public class GjallConfigurer {
     private boolean includeResponseHeaders = false;
     private boolean includeQueryString = true;
     private boolean includeClientInfo = false;
-    private GjallBeforeRequestHandler beforeRequestHandler = new SimpleGjallBeforeRequestHandler();
-    private GjallAfterRequestHandler afterRequestHandler = new SimpleGjallAfterRequestHandler();
+    private GjallBeforeRequestHandler beforeRequestHandler;
+    private GjallAfterRequestHandler afterRequestHandler;
+
+    public boolean isEnabledAfterLog() { return isIncludeRequestPayload() && includeResponseLog; }
 
     public boolean isIncludeResponseLog() {
         return includeResponseLog;
