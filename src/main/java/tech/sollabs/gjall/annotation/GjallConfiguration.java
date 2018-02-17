@@ -17,28 +17,30 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class GjallConfiguration {
 
+    private GjallConfigurer configurer;
     private GjallConfigurerAdapter configurerAdapter;
     private GjallBeforeRequestHandler beforeRequestHandler = new SimpleGjallBeforeRequestHandler();
     private GjallAfterRequestHandler afterRequestHandler = new SimpleGjallAfterRequestHandler();
 
-    @PostConstruct
-    public void init() {
-        configurerAdapter.configure(gjallConfigurerBuilder());
+    public GjallConfiguration() {
+        this.configurer = new GjallConfigurer();
     }
 
-    @Bean
-    public GjallConfigurer gjallConfigurer() {
-        return new GjallConfigurer();
+    @PostConstruct
+    public void init() {
+        if (configurerAdapter != null) {
+            configurerAdapter.configure(gjallConfigurerBuilder());
+        }
     }
 
     @Bean
     public GjallRequestLoggingFilter gjallRequestLoggingFilter() {
-        return new GjallRequestLoggingFilter(gjallConfigurer());
+        return new GjallRequestLoggingFilter(configurer);
     }
 
     @Bean
     public GjallConfigurerBuilder gjallConfigurerBuilder() {
-        GjallConfigurerBuilder configurerBuilder = new GjallConfigurerBuilder(gjallConfigurer());
+        GjallConfigurerBuilder configurerBuilder = new GjallConfigurerBuilder(configurer);
 
         configurerBuilder.beforeHandler(beforeRequestHandler);
         configurerBuilder.afterHandler(afterRequestHandler);
