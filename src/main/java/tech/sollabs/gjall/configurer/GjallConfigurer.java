@@ -1,7 +1,5 @@
 package tech.sollabs.gjall.configurer;
 
-import tech.sollabs.gjall.handlers.SimpleGjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.SimpleGjallBeforeRequestHandler;
 import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
 import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
 

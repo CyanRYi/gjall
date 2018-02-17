@@ -47,7 +47,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         HttpServletResponse responseToUse = response;
 
         if (isFirstRequest && configurer.isIncludeRequestPayload() && !(request instanceof ContentCachingRequestWrapper)) {
-            requestToUse = new ContentCachingRequestWrapper(request, configurer.getRequestPayloadLoggingSize());
+            requestToUse = new ContentCachingRequestWrapper(request);
         }
 
         if (isFirstRequest && configurer.isIncludeResponseLog() && !(response instanceof ContentCachingResponseWrapper)) {
@@ -66,7 +66,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         }
         finally {
             if (configurer.isEnabledAfterLog() && !isAsyncStarted(requestToUse)) {
-                apiLog = getAfterMessage(requestToUse, responseToUse, apiLog);
+                apiLog = getAfterLog(requestToUse, responseToUse, apiLog);
                 afterRequest(requestToUse, responseToUse, apiLog);
             }
         }
@@ -108,7 +108,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         return apiLog;
     }
 
-    private ApiLog getAfterMessage(HttpServletRequest request, HttpServletResponse response, ApiLog apiLog) throws IOException {
+    private ApiLog getAfterLog(HttpServletRequest request, HttpServletResponse response, ApiLog apiLog) throws IOException {
 
         if (configurer.isIncludeRequestPayload()) {
             ContentCachingRequestWrapper requestWrapper =
