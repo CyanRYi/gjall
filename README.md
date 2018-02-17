@@ -52,8 +52,6 @@ public class GjallConfig extends GjallConfigurerAdapter {
 }
 ```
 
-
-
 ## Source Code Repository
 (https://github.com/CyanRYi/gjall)
 
