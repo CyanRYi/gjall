@@ -1,8 +1,6 @@
 package tech.sollabs.gjall;
 
 /**
- *
- *
  * @author Cyan Raphael Yi
  * @since 0.1.0
  * @see javax.servlet.http.HttpServletRequest

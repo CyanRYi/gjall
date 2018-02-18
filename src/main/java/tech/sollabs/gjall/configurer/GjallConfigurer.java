@@ -3,6 +3,17 @@ package tech.sollabs.gjall.configurer;
 import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
 import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
 
+/**
+ * Has config about include or exclude logging properties
+ * setter can access from {@code {@link GjallConfigurerBuilder}}
+ *
+ * @author Cyan Raphael Yi
+ * @since 0.1.0
+ * @see GjallAfterRequestHandler
+ * @see GjallBeforeRequestHandler
+ * @see tech.sollabs.gjall.configurer.GjallConfigurerBuilder
+ * @see tech.sollabs.gjall.GjallRequestLoggingFilter
+ */
 public class GjallConfigurer {
 
     private boolean includeResponseLog = false;

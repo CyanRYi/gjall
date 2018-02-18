@@ -3,7 +3,7 @@ package tech.sollabs.gjall.annotation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import tech.sollabs.gjall.GjallConfigurerAdapter;
+import tech.sollabs.gjall.configurer.GjallConfigurerAdapter;
 import tech.sollabs.gjall.GjallRequestLoggingFilter;
 import tech.sollabs.gjall.configurer.GjallConfigurer;
 import tech.sollabs.gjall.configurer.GjallConfigurerBuilder;
@@ -14,6 +14,18 @@ import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Default Gjall Configuration for @EnableGjall
+ * GjallConfigurer just access here
+ *
+ * @author Cyan Raphael Yi
+ * @since 0.1.0
+ * @see EnableGjall
+ * @see GjallConfigurer
+ * @see GjallConfigurerBuilder
+ * @see GjallBeforeRequestHandler
+ * @see GjallAfterRequestHandler
+ */
 @Configuration
 public class GjallConfiguration {
 

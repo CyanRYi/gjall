@@ -8,8 +8,6 @@ import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
 import tech.sollabs.gjall.configurer.GjallConfigurer;
-import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -23,13 +21,15 @@ import java.util.Date;
 import java.util.UUID;
 
 /**
- *
+ * extends AbstractRequestLoggingFilter to Add Filter to servlet container
+ * handle ApiLog(Before and After) doing own jobs via Gjall*RequestHandler
  *
  * @author Cyan Raphael Yi
  * @since 0.1.0
- * @see GjallBeforeRequestHandler
- * @see GjallAfterRequestHandler
  * @see ApiLog
+ * @see AbstractRequestLoggingFilter
+ * @see ContentCachingRequestWrapper
+ * @see ContentCachingResponseWrapper
  */
 public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
@@ -154,20 +154,20 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     private String writeBufferAsString(byte[] buffer, String encoding, int payloadSize) {
 
-        if (buffer.length > 0) {
-            int length = Math.min(buffer.length, payloadSize);
-            String payload;
-            try {
-                payload = new String(buffer, 0, length, encoding);
-            }
-            catch (UnsupportedEncodingException ex) {
-                payload = "[unknown]";
-            }
-
-            return replaceEscapeWords(payload);
+        if (buffer.length == 0) {
+            return null;
         }
 
-        return null;
+        int length = Math.min(buffer.length, payloadSize);
+        String payload;
+        try {
+            payload = new String(buffer, 0, length, encoding);
+        }
+        catch (UnsupportedEncodingException ex) {
+            payload = "[unknown]";
+        }
+
+        return replaceEscapeWords(payload);
     }
 
     private String replaceEscapeWords(String payload) {
@@ -184,10 +184,12 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 new Date()) + "_" + UUID.randomUUID().toString().substring(19).replace("-", "");
     }
 
+    @Deprecated
     protected void beforeRequest(HttpServletRequest httpServletRequest, String s) {
         // No More Need this.
     }
 
+    @Deprecated
     protected void afterRequest(HttpServletRequest httpServletRequest, String s) {
         // No More Need this.
     }
