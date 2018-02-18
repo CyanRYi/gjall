@@ -4,6 +4,13 @@ import org.springframework.util.Assert;
 import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
 import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
 
+/**
+ * Builder to make GjallConfigurer
+ *
+ * @author Cyan Raphael Yi
+ * @since 0.1.0
+ * @see tech.sollabs.gjall.GjallRequestLoggingFilter
+ */
 public class GjallConfigurerBuilder {
 
     private GjallConfigurer gjallConfigurer;
