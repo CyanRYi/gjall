@@ -4,7 +4,7 @@ Gjall(_Gjallarhorn_) name stemmed from the Norse Mythology. - [wikipedia](https:
 
 ## Requirement
 
-* spring-web : 4.3.6-RELEASE
+* spring-web : 4.2.0-RELEASE
 * servlet-api : 3.0.1
 
 API Logging is a important issue in modern web environment reasons below.
@@ -19,8 +19,8 @@ gjall defines its own goal - doing simply, get powerful API logging.
 
 ## usage
 1. @EnableGjall with @Configuration
-1. make class extends GjallConfigurerAdapter and override configure(GjallConfigurerBuilder gjall)
-1. configure options you want like below via GjallConfigurerBuilder
+1. or make class extends GjallConfigurerAdapter with @Configuration
+1. implements GjallBeforeRequestHandler / GjallAfterRequestHandler and it makes Spring Bean
 
 ```java
 @EnableGjall
