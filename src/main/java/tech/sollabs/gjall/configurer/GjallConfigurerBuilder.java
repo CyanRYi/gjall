@@ -1,8 +1,8 @@
 package tech.sollabs.gjall.configurer;
 
 import org.springframework.util.Assert;
-import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
+import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
+import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
 /**
  * Builder to make GjallConfigurer
@@ -32,12 +32,12 @@ public class GjallConfigurerBuilder {
         return this;
     }
 
-    public GjallConfigurerBuilder beforeHandler(GjallBeforeRequestHandler beforeHandler) {
+    public GjallConfigurerBuilder beforeHandler(BeforeRequestLoggingHandler beforeHandler) {
         gjallConfigurer.setBeforeRequestHandler(beforeHandler);
         return this;
     }
 
-    public GjallConfigurerBuilder afterHandler(GjallAfterRequestHandler afterHandler) {
+    public GjallConfigurerBuilder afterHandler(AfterRequestLoggingHandler afterHandler) {
         gjallConfigurer.setAfterRequestHandler(afterHandler);
         return this;
     }

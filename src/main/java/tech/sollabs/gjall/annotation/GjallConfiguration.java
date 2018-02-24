@@ -7,10 +7,8 @@ import tech.sollabs.gjall.configurer.GjallConfigurerAdapter;
 import tech.sollabs.gjall.GjallRequestLoggingFilter;
 import tech.sollabs.gjall.configurer.GjallConfigurer;
 import tech.sollabs.gjall.configurer.GjallConfigurerBuilder;
-import tech.sollabs.gjall.handlers.SimpleGjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.SimpleGjallBeforeRequestHandler;
-import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
+import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
+import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
 import javax.annotation.PostConstruct;
 
@@ -23,16 +21,16 @@ import javax.annotation.PostConstruct;
  * @see EnableGjall
  * @see GjallConfigurer
  * @see GjallConfigurerBuilder
- * @see GjallBeforeRequestHandler
- * @see GjallAfterRequestHandler
+ * @see BeforeRequestLoggingHandler
+ * @see AfterRequestLoggingHandler
  */
 @Configuration
 public class GjallConfiguration {
 
     private GjallConfigurer configurer;
     private GjallConfigurerAdapter configurerAdapter;
-    private GjallBeforeRequestHandler beforeRequestHandler = new SimpleGjallBeforeRequestHandler();
-    private GjallAfterRequestHandler afterRequestHandler = new SimpleGjallAfterRequestHandler();
+    private BeforeRequestLoggingHandler beforeRequestHandler;
+    private AfterRequestLoggingHandler afterRequestHandler;
 
     public GjallConfiguration() {
         this.configurer = new GjallConfigurer();
@@ -66,12 +64,12 @@ public class GjallConfiguration {
     }
 
     @Autowired(required = false)
-    public void setBeforeRequestHandler(GjallBeforeRequestHandler beforeRequestHandler) {
+    public void setBeforeRequestHandler(BeforeRequestLoggingHandler beforeRequestHandler) {
         this.beforeRequestHandler = beforeRequestHandler;
     }
 
     @Autowired(required = false)
-    public void setAfterRequestHandler(GjallAfterRequestHandler afterRequestHandler) {
+    public void setAfterRequestHandler(AfterRequestLoggingHandler afterRequestHandler) {
         this.afterRequestHandler = afterRequestHandler;
     }
 }

@@ -196,11 +196,19 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     private void beforeRequest(HttpServletRequest request, ApiLog apiLog) {
 
-        configurer.getBeforeRequestHandler().handleBeforeRequest(request, apiLog);
+        if (configurer.getBeforeRequestHandler() == null) {
+            return;
+        }
+
+        configurer.getBeforeRequestHandler().handleLog(request, apiLog);
     }
 
     private void afterRequest(HttpServletRequest request, HttpServletResponse response, ApiLog apiLog) {
 
-        configurer.getAfterRequestHandler().handleAfterRequest(request, response, apiLog);
+        if (configurer.getAfterRequestHandler() == null) {
+            return;
+        }
+
+        configurer.getAfterRequestHandler().handleLog(request, response, apiLog);
     }
 }

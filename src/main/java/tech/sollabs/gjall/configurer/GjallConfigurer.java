@@ -1,7 +1,7 @@
 package tech.sollabs.gjall.configurer;
 
-import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
+import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
+import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
 /**
  * Has config about include or exclude logging properties
@@ -9,8 +9,8 @@ import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
  *
  * @author Cyan Raphael Yi
  * @since 0.1.0
- * @see GjallAfterRequestHandler
- * @see GjallBeforeRequestHandler
+ * @see BeforeRequestLoggingHandler
+ * @see AfterRequestLoggingHandler
  * @see tech.sollabs.gjall.configurer.GjallConfigurerBuilder
  * @see tech.sollabs.gjall.GjallRequestLoggingFilter
  */
@@ -23,8 +23,8 @@ public class GjallConfigurer {
     private boolean includeResponseHeaders = false;
     private boolean includeQueryString = true;
     private boolean includeClientInfo = false;
-    private GjallBeforeRequestHandler beforeRequestHandler;
-    private GjallAfterRequestHandler afterRequestHandler;
+    private BeforeRequestLoggingHandler beforeRequestHandler;
+    private AfterRequestLoggingHandler afterRequestHandler;
 
     public boolean isEnabledAfterLog() { return isIncludeRequestPayload() && includeResponseLog; }
 
@@ -84,19 +84,19 @@ public class GjallConfigurer {
         this.includeClientInfo = includeClientInfo;
     }
 
-    public GjallBeforeRequestHandler getBeforeRequestHandler() {
+    public BeforeRequestLoggingHandler getBeforeRequestHandler() {
         return beforeRequestHandler;
     }
 
-    void setBeforeRequestHandler(GjallBeforeRequestHandler beforeRequestHandler) {
+    void setBeforeRequestHandler(BeforeRequestLoggingHandler beforeRequestHandler) {
         this.beforeRequestHandler = beforeRequestHandler;
     }
 
-    public GjallAfterRequestHandler getAfterRequestHandler() {
+    public AfterRequestLoggingHandler getAfterRequestHandler() {
         return afterRequestHandler;
     }
 
-    void setAfterRequestHandler(GjallAfterRequestHandler afterRequestHandler) {
+    void setAfterRequestHandler(AfterRequestLoggingHandler afterRequestHandler) {
         this.afterRequestHandler = afterRequestHandler;
     }
 
