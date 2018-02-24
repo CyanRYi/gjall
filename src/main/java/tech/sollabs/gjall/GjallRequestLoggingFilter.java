@@ -21,7 +21,7 @@ import java.util.UUID;
 
 /**
  * extends AbstractRequestLoggingFilter to Add Filter to servlet container
- * handle ApiLog(Before and After) doing own jobs via Gjall*RequestHandler
+ * handle ApiLog(Before and After) doing own jobs via [Before/After]RequestLoggingHandler
  *
  * @author Cyan Raphael Yi
  * @since 0.1.0
@@ -54,7 +54,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         }
 
         boolean shouldLog = shouldLog(requestToUse);
-        ApiLog apiLog = new ApiLog(createRequestLogId());
+        ApiLog apiLog = new ApiLog(this.createRequestLogId());
 
         if (shouldLog && isFirstRequest) {
             apiLog = getBeforeLog(requestToUse, apiLog);
@@ -64,7 +64,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
             filterChain.doFilter(requestToUse, responseToUse);
         }
         finally {
-            if (configurer.isEnabledAfterLog() && !isAsyncStarted(requestToUse)) {
+            if (!isAsyncStarted(requestToUse) && (configurer.isIncludeResponseLog() || configurer.isIncludeRequestPayload())) {
                 apiLog = getAfterLog(requestToUse, responseToUse, apiLog);
                 afterRequest(requestToUse, responseToUse, apiLog);
             }
@@ -114,21 +114,27 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         apiLog.setRequestFinishedAt(new Date().getTime());
 
         if (configurer.isIncludeRequestPayload()) {
+
             ContentCachingRequestWrapper requestWrapper =
                     WebUtils.getNativeRequest(request, ContentCachingRequestWrapper.class);
 
+            String payload = null;
+
             if (requestWrapper != null) {
                 byte[] buf = requestWrapper.getContentAsByteArray();
-
-                String payload = this.writeBufferAsString(
+                payload = this.writeBufferAsString(
                         buf, requestWrapper.getCharacterEncoding(), configurer.getRequestPayloadLoggingSize());
-
-                apiLog.setRequestBody(payload);
             }
+
+            apiLog.setRequestBody(payload);
         }
 
         ContentCachingResponseWrapper responseWrapper =
                 WebUtils.getNativeResponse(response, ContentCachingResponseWrapper.class);
+
+        if (responseWrapper == null) {
+            return apiLog;
+        }
 
         apiLog.setHttpStatus(responseWrapper.getStatusCode());
 
@@ -143,12 +149,10 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         if (configurer.isIncludeResponsePayload()) {
 
             byte[] buf = responseWrapper.getContentAsByteArray();
-
             String payload = this.writeBufferAsString(
                     buf, responseWrapper.getCharacterEncoding(), configurer.getResponsePayloadLoggingSize());
 
             apiLog.setResponseBody(payload);
-
             responseWrapper.copyBodyToResponse();
         }
 
@@ -179,11 +183,6 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 .replaceAll("\t", "");
     }
 
-    private UUID createRequestLogId() {
-
-        return UUID.randomUUID();
-    }
-
     @Deprecated
     protected void beforeRequest(HttpServletRequest httpServletRequest, String s) {
         // No More Need this.
@@ -194,8 +193,12 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
         // No More Need this.
     }
 
-    private void beforeRequest(HttpServletRequest request, ApiLog apiLog) {
+    private UUID createRequestLogId() {
 
+        return UUID.randomUUID();
+    }
+
+    private void beforeRequest(HttpServletRequest request, ApiLog apiLog) {
         if (configurer.getBeforeRequestHandler() == null) {
             return;
         }
