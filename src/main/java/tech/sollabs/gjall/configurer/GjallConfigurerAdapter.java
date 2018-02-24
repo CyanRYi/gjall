@@ -9,5 +9,5 @@ package tech.sollabs.gjall.configurer;
  */
 public abstract class GjallConfigurerAdapter {
 
-    public void configure(GjallConfigurerBuilder gjall) {}
+    public abstract void configure(GjallConfigurerBuilder gjall);
 }

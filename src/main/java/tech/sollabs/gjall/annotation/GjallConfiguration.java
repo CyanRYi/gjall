@@ -5,7 +5,6 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
 import tech.sollabs.gjall.configurer.GjallConfigurerAdapter;
 import tech.sollabs.gjall.GjallRequestLoggingFilter;
 import tech.sollabs.gjall.configurer.GjallConfigurer;
@@ -73,7 +72,6 @@ public class GjallConfiguration {
     }
 
     @Bean
-    @Lazy
     public GjallRequestLoggingFilter gjallRequestLoggingFilter() {
         return new GjallRequestLoggingFilter(configurer);
     }
