@@ -1,5 +1,7 @@
 package tech.sollabs.gjall;
 
+import java.util.UUID;
+
 /**
  * @author Cyan Raphael Yi
  * @since 0.1.0
@@ -9,7 +11,7 @@ package tech.sollabs.gjall;
  */
 public class ApiLog {
 
-    private final String id;
+    private final UUID id;
     private String uri;
     private String method;
     private Integer httpStatus;
@@ -18,12 +20,14 @@ public class ApiLog {
     private String requestBody;
     private String responseHeader;
     private String responseBody;
+    private long requestAcceptedAt;
+    private long requestFinishedAt;
 
-    public ApiLog(String id) {
+    public ApiLog(UUID id) {
         this.id = id;
     }
 
-    public String getId() {
+    public UUID getId() {
         return id;
     }
 
@@ -140,6 +144,22 @@ public class ApiLog {
                     ", user='" + user + '\'' +
                     '}';
         }
+    }
+
+    public long getRequestAcceptedAt() {
+        return requestAcceptedAt;
+    }
+
+    public void setRequestAcceptedAt(long requestAcceptedAt) {
+        this.requestAcceptedAt = requestAcceptedAt;
+    }
+
+    public long getRequestFinishedAt() {
+        return requestFinishedAt;
+    }
+
+    public void setRequestFinishedAt(long requestFinishedAt) {
+        this.requestFinishedAt = requestFinishedAt;
     }
 
     @Override

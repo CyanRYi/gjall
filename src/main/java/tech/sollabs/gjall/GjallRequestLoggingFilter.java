@@ -16,7 +16,6 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.UUID;
 
@@ -74,6 +73,8 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     private ApiLog getBeforeLog(HttpServletRequest request, ApiLog apiLog) {
 
+        apiLog.setRequestAcceptedAt(new Date().getTime());
+
         apiLog.setUri(request.getRequestURI());
         apiLog.setMethod(request.getMethod());
 
@@ -109,6 +110,8 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
     }
 
     private ApiLog getAfterLog(HttpServletRequest request, HttpServletResponse response, ApiLog apiLog) throws IOException {
+
+        apiLog.setRequestFinishedAt(new Date().getTime());
 
         if (configurer.isIncludeRequestPayload()) {
             ContentCachingRequestWrapper requestWrapper =
@@ -176,12 +179,9 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 .replaceAll("\t", "");
     }
 
-    private String createRequestLogId() {
+    private UUID createRequestLogId() {
 
-        SimpleDateFormat REQUEST_ID_DATE_FORMAT = new SimpleDateFormat("yyyyMMddHHmmss");
-
-        return REQUEST_ID_DATE_FORMAT.format(
-                new Date()) + "_" + UUID.randomUUID().toString().substring(19).replace("-", "");
+        UUID.randomUUID();
     }
 
     @Deprecated
