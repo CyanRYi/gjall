@@ -164,15 +164,19 @@ public class ApiLog {
 
     @Override
     public String toString() {
-        return "ApiLog{" + "id='" + id + '\'' +
-                ", uri='" + uri + '\'' +
-                ", method='" + method + '\'' +
-                ", httpStatus=" + httpStatus +
-                ", clientInfo=" + clientInfo +
-                ", requestHeader='" + requestHeader + '\'' +
-                ", requestBody='" + requestBody + '\'' +
-                ", responseHeader='" + responseHeader + '\'' +
-                ", responseBody='" + responseBody + '\'' +
-                '}';
+        final StringBuilder sb = new StringBuilder("ApiLog{");
+        sb.append("id=").append(id);
+        sb.append(", uri='").append(uri).append('\'');
+        sb.append(", method='").append(method).append('\'');
+        sb.append(", httpStatus=").append(httpStatus);
+        sb.append(", clientInfo=").append(clientInfo);
+        sb.append(", requestHeader='").append(requestHeader).append('\'');
+        sb.append(", requestBody='").append(requestBody).append('\'');
+        sb.append(", responseHeader='").append(responseHeader).append('\'');
+        sb.append(", responseBody='").append(responseBody).append('\'');
+        sb.append(", requestAcceptedAt=").append(requestAcceptedAt);
+        sb.append(", requestFinishedAt=").append(requestFinishedAt);
+        sb.append('}');
+        return sb.toString();
     }
 }

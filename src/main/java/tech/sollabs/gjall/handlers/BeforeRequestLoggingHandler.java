@@ -1,4 +1,4 @@
-package tech.sollabs.gjall.handlers.core;
+package tech.sollabs.gjall.handlers;
 
 import tech.sollabs.gjall.ApiLog;
 
@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletRequest;
  * @see tech.sollabs.gjall.GjallRequestLoggingFilter
  * @see tech.sollabs.gjall.configurer.GjallConfigurerBuilder
  */
-public interface GjallBeforeRequestHandler {
+public interface BeforeRequestLoggingHandler {
 
-    void handleBeforeRequest(HttpServletRequest req, ApiLog apiLog);
+    void handleLog(HttpServletRequest req, ApiLog apiLog);
 }

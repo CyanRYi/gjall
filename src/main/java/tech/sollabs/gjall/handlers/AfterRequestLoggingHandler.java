@@ -1,4 +1,4 @@
-package tech.sollabs.gjall.handlers.core;
+package tech.sollabs.gjall.handlers;
 
 import tech.sollabs.gjall.ApiLog;
 
@@ -14,7 +14,7 @@ import javax.servlet.http.HttpServletResponse;
  * @see tech.sollabs.gjall.GjallRequestLoggingFilter
  * @see tech.sollabs.gjall.configurer.GjallConfigurerBuilder
  */
-public interface GjallAfterRequestHandler {
+public interface AfterRequestLoggingHandler {
 
-    void handleAfterRequest(HttpServletRequest req, HttpServletResponse resp, ApiLog apiLog);
+    void handleLog(HttpServletRequest req, HttpServletResponse resp, ApiLog apiLog);
 }

@@ -1,8 +1,8 @@
 package tech.sollabs.gjall.configurer;
 
 import org.springframework.util.Assert;
-import tech.sollabs.gjall.handlers.core.GjallAfterRequestHandler;
-import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
+import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
+import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
 /**
  * Builder to make GjallConfigurer
@@ -13,56 +13,44 @@ import tech.sollabs.gjall.handlers.core.GjallBeforeRequestHandler;
  */
 public class GjallConfigurerBuilder {
 
-    private GjallConfigurer gjallConfigurer;
-
-    private GjallRequestConfigurer requestConfigurer = null;
-    private GjallResponseConfigurer responseConfigurer = null;
-
-    public GjallConfigurerBuilder(GjallConfigurer gjallConfigurer) {
-        this.gjallConfigurer = gjallConfigurer;
-    }
+    private boolean includeQueryString = true;
+    private boolean includeClientInfo = false;
+    private BeforeRequestLoggingHandler beforeRequestHandler;
+    private AfterRequestLoggingHandler afterRequestHandler;
+    private GjallRequestConfigurer requestConfigurer = new GjallRequestConfigurer();
+    private GjallResponseConfigurer responseConfigurer = new GjallResponseConfigurer();
 
     public GjallConfigurerBuilder includeQueryString(boolean includeQueryString) {
-        gjallConfigurer.setIncludeQueryString(includeQueryString);
+        this.includeQueryString = includeQueryString;
         return this;
     }
 
     public GjallConfigurerBuilder includeClientInfo(boolean includeClientInfo) {
-        gjallConfigurer.setIncludeClientInfo(includeClientInfo);
+        this.includeClientInfo = includeClientInfo;
         return this;
     }
 
-    public GjallConfigurerBuilder beforeHandler(GjallBeforeRequestHandler beforeHandler) {
-        gjallConfigurer.setBeforeRequestHandler(beforeHandler);
+    public GjallConfigurerBuilder beforeHandler(BeforeRequestLoggingHandler beforeHandler) {
+        this.beforeRequestHandler = beforeHandler;
         return this;
     }
 
-    public GjallConfigurerBuilder afterHandler(GjallAfterRequestHandler afterHandler) {
-        gjallConfigurer.setAfterRequestHandler(afterHandler);
+    public GjallConfigurerBuilder afterHandler(AfterRequestLoggingHandler afterHandler) {
+        this.afterRequestHandler = afterHandler;
         return this;
     }
 
-    public GjallRequestConfigurer request() {
+    public GjallRequestConfigurer request() { return this.requestConfigurer; }
 
-        if (requestConfigurer == null) {
-            this.requestConfigurer = new GjallRequestConfigurer();
-        }
-        return this.requestConfigurer;
-    }
-
-    public GjallResponseConfigurer response() {
-
-        if (responseConfigurer == null) {
-            this.responseConfigurer = new GjallResponseConfigurer();
-            gjallConfigurer.setIncludeResponseLog(true);
-        }
-        return this.responseConfigurer;
-    }
+    public GjallResponseConfigurer response() { return this.responseConfigurer; }
 
     public class GjallRequestConfigurer {
 
+        boolean includeHeaders = false;
+        int payloadSize = 0;
+
         public GjallRequestConfigurer includeHeaders(boolean includeHeaders) {
-            gjallConfigurer.setIncludeRequestHeaders(includeHeaders);
+            this.includeHeaders = includeHeaders;
             return this;
         }
 
@@ -71,7 +59,7 @@ public class GjallConfigurerBuilder {
             Assert.isTrue(payloadSize > -1, "Payload size cannot be negative. If you want ignore payload, insert 0 instead negative integer.");
             Assert.isTrue(payloadSize <= 5000, "Payload size cannot be over 5000. It allows from 0 to 5000.(0 means ignore payload)");
 
-            gjallConfigurer.setRequestPayloadLoggingSize(payloadSize);
+            this.payloadSize = payloadSize;
             return this;
         }
 
@@ -82,8 +70,11 @@ public class GjallConfigurerBuilder {
 
     public class GjallResponseConfigurer {
 
+        boolean includeHeaders = false;
+        int payloadSize = 0;
+
         public GjallResponseConfigurer includeHeaders(boolean includeHeader) {
-            gjallConfigurer.setIncludeResponseHeaders(includeHeader);
+            this.includeHeaders = includeHeader;
             return this;
         }
 
@@ -92,12 +83,20 @@ public class GjallConfigurerBuilder {
             Assert.isTrue(payloadSize > -1, "Payload size cannot be negative. If you want ignore payload, insert 0 instead negative integer.");
             Assert.isTrue(payloadSize <= 5000, "Payload size cannot be over 5000. It allows from 0 to 5000.(0 means ignore payload)");
 
-            gjallConfigurer.setResponsePayloadLoggingSize(payloadSize);
+            this.payloadSize = payloadSize;
             return this;
         }
 
         public GjallConfigurerBuilder and() {
             return GjallConfigurerBuilder.this;
         }
+    }
+
+    public GjallConfigurer build() {
+
+        return new GjallConfigurer(this.includeQueryString, this.includeClientInfo,
+                this.requestConfigurer.includeHeaders, this.requestConfigurer.payloadSize,
+                this.responseConfigurer.includeHeaders, this.responseConfigurer.payloadSize,
+                this.beforeRequestHandler, this.afterRequestHandler);
     }
 }
