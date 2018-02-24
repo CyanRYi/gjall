@@ -181,7 +181,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
     private UUID createRequestLogId() {
 
-        UUID.randomUUID();
+        return UUID.randomUUID();
     }
 
     @Deprecated
