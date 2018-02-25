@@ -29,7 +29,7 @@ import javax.annotation.PostConstruct;
 @Configuration
 public class GjallConfiguration {
 
-    private static Log LOGGER = LogFactory.getLog(GjallConfiguration.class);
+    private static final Log LOGGER = LogFactory.getLog(GjallConfiguration.class);
 
     private GjallConfigurer configurer;
     private GjallConfigurerAdapter configurerAdapter;
