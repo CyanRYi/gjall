@@ -108,7 +108,7 @@ public class ApiLog {
         this.responseBody = responseBody;
     }
 
-    class ClientInfo {
+    public class ClientInfo {
 
         private String client;
         private String sessionId;
