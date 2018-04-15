@@ -1,5 +1,7 @@
 package tech.sollabs.gjall;
 
+import org.springframework.http.HttpStatus;
+
 import java.util.UUID;
 
 /**
@@ -14,7 +16,7 @@ public class ApiLog {
     private final UUID id;
     private String uri;
     private String method;
-    private Integer httpStatus;
+    private HttpStatus httpStatus = null;
     private ClientInfo clientInfo = null;
     private String requestHeader;
     private String requestBody;
@@ -52,11 +54,11 @@ public class ApiLog {
         this.method = method;
     }
 
-    public int getHttpStatus() {
+    public HttpStatus getHttpStatus() {
         return httpStatus;
     }
 
-    public void setHttpStatus(int httpStatus) {
+    public void setHttpStatus(HttpStatus httpStatus) {
         this.httpStatus = httpStatus;
     }
 

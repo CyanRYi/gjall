@@ -1,6 +1,7 @@
 package tech.sollabs.gjall;
 
 import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.server.ServletServerHttpRequest;
 import org.springframework.util.StringUtils;
 import org.springframework.web.filter.AbstractRequestLoggingFilter;
@@ -136,7 +137,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
             return apiLog;
         }
 
-        apiLog.setHttpStatus(responseWrapper.getStatusCode());
+        apiLog.setHttpStatus(HttpStatus.valueOf(responseWrapper.getStatusCode()));
 
         if (configurer.isIncludeResponseHeaders()) {
             HttpHeaders responseHeaders = new HttpHeaders();
