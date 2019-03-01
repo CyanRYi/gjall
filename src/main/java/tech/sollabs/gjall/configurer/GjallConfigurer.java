@@ -28,15 +28,44 @@ public class GjallConfigurer {
     private BeforeRequestLoggingHandler beforeRequestHandler;
     private AfterRequestLoggingHandler afterRequestHandler;
 
-    public GjallConfigurer(boolean includeQueryString, boolean includeClientInfo, boolean includeRequestHeaders, int requestPayloadLoggingSize, boolean includeResponseHeaders, int responsePayloadLoggingSize, BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
-        this.includeQueryString = includeQueryString;
-        this.includeClientInfo = includeClientInfo;
-        this.includeRequestHeaders = includeRequestHeaders;
-        this.requestPayloadLoggingSize = requestPayloadLoggingSize;
-        this.includeResponseHeaders = includeResponseHeaders;
-        this.responsePayloadLoggingSize = responsePayloadLoggingSize;
+    public static GjallConfigurer of(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
+
+        return new GjallConfigurer(beforeRequestHandler, afterRequestHandler);
+    }
+
+    private GjallConfigurer(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
         this.beforeRequestHandler = beforeRequestHandler;
         this.afterRequestHandler = afterRequestHandler;
+    }
+
+    GjallConfigurer setIncludeQueryString(boolean includeQueryString) {
+        this.includeQueryString = includeQueryString;
+        return this;
+    }
+
+    GjallConfigurer setIncludeClientInfo(boolean includeClientInfo) {
+        this.includeClientInfo = includeClientInfo;
+        return this;
+    }
+
+    GjallConfigurer setIncludeRequestHeaders(boolean includeRequestHeaders) {
+        this.includeRequestHeaders = includeRequestHeaders;
+        return this;
+    }
+
+    GjallConfigurer setRequestPayloadLoggingSize(int requestPayloadLoggingSize) {
+        this.requestPayloadLoggingSize = requestPayloadLoggingSize;
+        return this;
+    }
+
+    GjallConfigurer setIncludeResponseHeaders(boolean includeResponseHeaders) {
+        this.includeResponseHeaders = includeResponseHeaders;
+        return this;
+    }
+
+    GjallConfigurer setResponsePayloadLoggingSize(int responsePayloadLoggingSize) {
+        this.responsePayloadLoggingSize = responsePayloadLoggingSize;
+        return this;
     }
 
     public boolean isIncludeRequestPayload() {
