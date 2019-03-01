@@ -1,5 +1,7 @@
 package tech.sollabs.gjall.configurer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
 import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
@@ -16,6 +18,8 @@ import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
  */
 public class GjallConfigurer {
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     private boolean includeQueryString = true;
     private boolean includeClientInfo = false;
 
@@ -29,6 +33,10 @@ public class GjallConfigurer {
     private AfterRequestLoggingHandler afterRequestHandler;
 
     public static GjallConfigurer of(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
+
+        if (beforeRequestHandler == null && afterRequestHandler == null) {
+            throw new NullPointerException("No Request Handlers registered. At least 1 handler needed");
+        }
 
         return new GjallConfigurer(beforeRequestHandler, afterRequestHandler);
     }
@@ -55,16 +63,28 @@ public class GjallConfigurer {
 
     GjallConfigurer setRequestPayloadLoggingSize(int requestPayloadLoggingSize) {
         this.requestPayloadLoggingSize = requestPayloadLoggingSize;
+
+        if (afterRequestHandler == null && isIncludeRequestPayload()) {
+            logger.warn("No AfterRequestLoggingHandler registered. RequestPayload will ignore");
+        }
         return this;
     }
 
     GjallConfigurer setIncludeResponseHeaders(boolean includeResponseHeaders) {
         this.includeResponseHeaders = includeResponseHeaders;
+
+        if (afterRequestHandler == null && isIncludeRequestPayload()) {
+            logger.warn("No AfterRequestLoggingHandler registered. ResponseHeaders will ignore");
+        }
         return this;
     }
 
     GjallConfigurer setResponsePayloadLoggingSize(int responsePayloadLoggingSize) {
         this.responsePayloadLoggingSize = responsePayloadLoggingSize;
+
+        if (afterRequestHandler == null && isIncludeRequestPayload()) {
+            logger.warn("No AfterRequestLoggingHandler registered. ResponsePayload will ignore");
+        }
         return this;
     }
 
