@@ -94,9 +94,12 @@ public class GjallConfigurerBuilder {
 
     public GjallConfigurer build() {
 
-        return new GjallConfigurer(this.includeQueryString, this.includeClientInfo,
-                this.requestConfigurer.includeHeaders, this.requestConfigurer.payloadSize,
-                this.responseConfigurer.includeHeaders, this.responseConfigurer.payloadSize,
-                this.beforeRequestHandler, this.afterRequestHandler);
+        return GjallConfigurer.of(beforeRequestHandler, afterRequestHandler)
+                .setIncludeClientInfo(includeClientInfo)
+                .setIncludeQueryString(includeQueryString)
+                .setIncludeRequestHeaders(requestConfigurer.includeHeaders)
+                .setRequestPayloadLoggingSize(requestConfigurer.payloadSize)
+                .setIncludeResponseHeaders(responseConfigurer.includeHeaders)
+                .setResponsePayloadLoggingSize(responseConfigurer.payloadSize);
     }
 }

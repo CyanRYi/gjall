@@ -1,5 +1,7 @@
 package tech.sollabs.gjall.configurer;
 
+import org.apache.commons.logging.Log;
+import org.apache.commons.logging.LogFactory;
 import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
 import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
@@ -16,6 +18,8 @@ import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
  */
 public class GjallConfigurer {
 
+    private final Log logger = LogFactory.getLog(getClass());
+
     private boolean includeQueryString = true;
     private boolean includeClientInfo = false;
 
@@ -28,15 +32,60 @@ public class GjallConfigurer {
     private BeforeRequestLoggingHandler beforeRequestHandler;
     private AfterRequestLoggingHandler afterRequestHandler;
 
-    public GjallConfigurer(boolean includeQueryString, boolean includeClientInfo, boolean includeRequestHeaders, int requestPayloadLoggingSize, boolean includeResponseHeaders, int responsePayloadLoggingSize, BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
-        this.includeQueryString = includeQueryString;
-        this.includeClientInfo = includeClientInfo;
-        this.includeRequestHeaders = includeRequestHeaders;
-        this.requestPayloadLoggingSize = requestPayloadLoggingSize;
-        this.includeResponseHeaders = includeResponseHeaders;
-        this.responsePayloadLoggingSize = responsePayloadLoggingSize;
+    public static GjallConfigurer of(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
+
+        if (beforeRequestHandler == null && afterRequestHandler == null) {
+            throw new NullPointerException("No Request Handlers registered. At least 1 handler needed");
+        }
+
+        return new GjallConfigurer(beforeRequestHandler, afterRequestHandler);
+    }
+
+    private GjallConfigurer(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
         this.beforeRequestHandler = beforeRequestHandler;
         this.afterRequestHandler = afterRequestHandler;
+    }
+
+    GjallConfigurer setIncludeQueryString(boolean includeQueryString) {
+        this.includeQueryString = includeQueryString;
+        return this;
+    }
+
+    GjallConfigurer setIncludeClientInfo(boolean includeClientInfo) {
+        this.includeClientInfo = includeClientInfo;
+        return this;
+    }
+
+    GjallConfigurer setIncludeRequestHeaders(boolean includeRequestHeaders) {
+        this.includeRequestHeaders = includeRequestHeaders;
+        return this;
+    }
+
+    GjallConfigurer setRequestPayloadLoggingSize(int requestPayloadLoggingSize) {
+        this.requestPayloadLoggingSize = requestPayloadLoggingSize;
+
+        if (afterRequestHandler == null && isIncludeRequestPayload()) {
+            logger.warn("No AfterRequestLoggingHandler registered. RequestPayload will ignore");
+        }
+        return this;
+    }
+
+    GjallConfigurer setIncludeResponseHeaders(boolean includeResponseHeaders) {
+        this.includeResponseHeaders = includeResponseHeaders;
+
+        if (afterRequestHandler == null && isIncludeRequestPayload()) {
+            logger.warn("No AfterRequestLoggingHandler registered. ResponseHeaders will ignore");
+        }
+        return this;
+    }
+
+    GjallConfigurer setResponsePayloadLoggingSize(int responsePayloadLoggingSize) {
+        this.responsePayloadLoggingSize = responsePayloadLoggingSize;
+
+        if (afterRequestHandler == null && isIncludeRequestPayload()) {
+            logger.warn("No AfterRequestLoggingHandler registered. ResponsePayload will ignore");
+        }
+        return this;
     }
 
     public boolean isIncludeRequestPayload() {
