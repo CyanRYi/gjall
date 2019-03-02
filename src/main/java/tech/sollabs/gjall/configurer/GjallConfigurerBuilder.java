@@ -70,8 +70,14 @@ public class GjallConfigurerBuilder {
 
     public class GjallResponseConfigurer {
 
+        boolean includeStatusCode = false;
         boolean includeHeaders = false;
         int payloadSize = 0;
+
+        public GjallResponseConfigurer includeStatusCode(boolean includeStatusCode) {
+            this.includeStatusCode = includeStatusCode;
+            return this;
+        }
 
         public GjallResponseConfigurer includeHeaders(boolean includeHeader) {
             this.includeHeaders = includeHeader;
@@ -99,6 +105,7 @@ public class GjallConfigurerBuilder {
                 .setIncludeQueryString(includeQueryString)
                 .setIncludeRequestHeaders(requestConfigurer.includeHeaders)
                 .setRequestPayloadLoggingSize(requestConfigurer.payloadSize)
+                .setIncludeStatusCode(responseConfigurer.includeStatusCode)
                 .setIncludeResponseHeaders(responseConfigurer.includeHeaders)
                 .setResponsePayloadLoggingSize(responseConfigurer.payloadSize);
     }

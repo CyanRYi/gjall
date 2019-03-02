@@ -22,10 +22,10 @@ public class GjallConfigurer {
 
     private boolean includeQueryString = true;
     private boolean includeClientInfo = false;
-
     private boolean includeRequestHeaders = false;
     private int requestPayloadLoggingSize = 0;
 
+    private boolean includeStatusCode = false;
     private boolean includeResponseHeaders = false;
     private int responsePayloadLoggingSize = 0;
 
@@ -70,6 +70,11 @@ public class GjallConfigurer {
         return this;
     }
 
+    public GjallConfigurer setIncludeStatusCode(boolean includeStatusCode) {
+        this.includeStatusCode = includeStatusCode;
+        return this;
+    }
+
     GjallConfigurer setIncludeResponseHeaders(boolean includeResponseHeaders) {
         this.includeResponseHeaders = includeResponseHeaders;
 
@@ -88,36 +93,40 @@ public class GjallConfigurer {
         return this;
     }
 
-    public boolean isIncludeRequestPayload() {
-        return requestPayloadLoggingSize > 0;
-    }
-
-    public boolean isIncludeResponsePayload() {
-        return responsePayloadLoggingSize > 0;
-    }
-
-    public int getRequestPayloadLoggingSize() {
-        return requestPayloadLoggingSize;
-    }
-
-    public int getResponsePayloadLoggingSize() {
-        return responsePayloadLoggingSize;
-    }
-
-    public boolean isIncludeRequestHeaders() {
-        return includeRequestHeaders;
-    }
-
-    public boolean isIncludeResponseHeaders() {
-        return includeResponseHeaders;
-    }
-
     public boolean isIncludeQueryString() {
         return includeQueryString;
     }
 
     public boolean isIncludeClientInfo() {
         return includeClientInfo;
+    }
+
+    public boolean isIncludeRequestHeaders() {
+        return includeRequestHeaders;
+    }
+
+    public int getRequestPayloadLoggingSize() {
+        return requestPayloadLoggingSize;
+    }
+
+    public boolean isIncludeRequestPayload() {
+        return requestPayloadLoggingSize > 0;
+    }
+
+    public boolean isIncludeStatusCode() {
+        return includeStatusCode;
+    }
+
+    public boolean isIncludeResponseHeaders() {
+        return includeResponseHeaders;
+    }
+
+    public int getResponsePayloadLoggingSize() {
+        return responsePayloadLoggingSize;
+    }
+
+    public boolean isIncludeResponsePayload() {
+        return responsePayloadLoggingSize > 0;
     }
 
     public BeforeRequestLoggingHandler getBeforeRequestHandler() {
@@ -129,6 +138,6 @@ public class GjallConfigurer {
     }
 
     public boolean isIncludeResponseLog() {
-        return this.isIncludeResponseHeaders() || this.isIncludeResponsePayload();
+        return isIncludeStatusCode() || isIncludeResponseHeaders() || isIncludeResponsePayload();
     }
 }
