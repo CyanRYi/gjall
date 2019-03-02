@@ -1,6 +1,7 @@
 package tech.sollabs.gjall.annotation;
 
 import org.springframework.context.annotation.Import;
+import tech.sollabs.gjall.GjallConfiguration;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
