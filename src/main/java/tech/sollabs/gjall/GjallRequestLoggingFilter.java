@@ -8,7 +8,7 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
-import tech.sollabs.gjall.configurer.GjallConfigurer;
+import tech.sollabs.gjall.configurer.ApiLoggingConfigurer;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -32,10 +32,10 @@ import java.util.UUID;
  * @see ContentCachingResponseWrapper
  */
 public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
+gj
+    private final ApiLoggingConfigurer configurer;
 
-    private final GjallConfigurer configurer;
-
-    public GjallRequestLoggingFilter(GjallConfigurer configurer) {
+    public GjallRequestLoggingFilter(ApiLoggingConfigurer configurer) {
         this.configurer = configurer;
     }
 
