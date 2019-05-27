@@ -50,7 +50,7 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
             requestToUse = new ContentCachingRequestWrapper(request);
         }
 
-        if (isFirstRequest && configurer.isIncludeResponseLog() && !(response instanceof ContentCachingResponseWrapper)) {
+        if (isFirstRequest && configurer.isIncludeResponsePayload() && !(response instanceof ContentCachingResponseWrapper)) {
             responseToUse = new ContentCachingResponseWrapper(response);
         }
 
