@@ -32,7 +32,7 @@ import java.util.UUID;
  * @see ContentCachingResponseWrapper
  */
 public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
-gj
+
     private final ApiLoggingConfigurer configurer;
 
     public GjallRequestLoggingFilter(ApiLoggingConfigurer configurer) {
@@ -194,8 +194,7 @@ gj
         // No More Need this.
     }
 
-    private UUID createRequestLogId() {
-
+    protected Object createRequestLogId() {
         return UUID.randomUUID();
     }
 
