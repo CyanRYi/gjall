@@ -184,14 +184,22 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 .replaceAll("\t", "");
     }
 
+    /**
+     * @deprecated in Gjall, beforeRequest use <code>ApiLog</code> instead <code>String</code>.
+     * @see #beforeRequest(HttpServletRequest, ApiLog)
+     */
     @Deprecated
     protected void beforeRequest(HttpServletRequest httpServletRequest, String s) {
-        // No More Need this.
+        throw new UnsupportedOperationException("use instead beforeRequest(HttpServletRequest, ApiLog)");
     }
 
+    /**
+     * @deprecated in Gjall, afterRequest use <code>ApiLog</code> instead <code>String</code>.
+     * @see #afterRequest(HttpServletRequest, HttpServletResponse, ApiLog)
+     */
     @Deprecated
     protected void afterRequest(HttpServletRequest httpServletRequest, String s) {
-        // No More Need this.
+        throw new UnsupportedOperationException("use instead afterRequest(HttpServletRequest, HttpServletResponse, ApiLog)");
     }
 
     protected Object createRequestLogId() {
