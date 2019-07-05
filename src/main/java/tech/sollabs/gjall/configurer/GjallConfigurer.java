@@ -4,6 +4,7 @@ import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
 import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
+import tech.sollabs.gjall.handlers.SimpleBeforeRequestLoggingHandler;
 
 /**
  * Has config about include or exclude logging properties
@@ -33,17 +34,18 @@ public class GjallConfigurer {
     private AfterRequestLoggingHandler afterRequestHandler;
 
     public static GjallConfigurer of(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
-
-        if (beforeRequestHandler == null && afterRequestHandler == null) {
-            throw new NullPointerException("No Request Handlers registered. At least 1 handler needed");
-        }
-
         return new GjallConfigurer(beforeRequestHandler, afterRequestHandler);
     }
 
     private GjallConfigurer(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
-        this.beforeRequestHandler = beforeRequestHandler;
-        this.afterRequestHandler = afterRequestHandler;
+
+        if (beforeRequestHandler == null && afterRequestHandler == null) {
+            logger.info("No Request Handlers registered. tech.sollabs.gjall.handlers.SimpleBeforeRequestLoggingHandler will be add for default configuration");
+            this.beforeRequestHandler = new SimpleBeforeRequestLoggingHandler();
+        } else {
+            this.beforeRequestHandler = beforeRequestHandler;
+            this.afterRequestHandler = afterRequestHandler;
+        }
     }
 
     GjallConfigurer setIncludeQueryString(boolean includeQueryString) {
