@@ -8,16 +8,16 @@ import tech.sollabs.gjall.handlers.SimpleBeforeRequestLoggingHandler;
 
 /**
  * Has config about include or exclude logging properties
- * setter can access from {@code {@link GjallConfigurerBuilder}}
+ * setter can access from {@code {@link ApiLoggingConfigurerBuilder }}
  *
  * @author Cyan Raphael Yi
  * @since 0.1.0
  * @see AfterRequestLoggingHandler
  * @see BeforeRequestLoggingHandler
- * @see tech.sollabs.gjall.configurer.GjallConfigurerBuilder
+ * @see ApiLoggingConfigurerBuilder
  * @see tech.sollabs.gjall.GjallRequestLoggingFilter
  */
-public class GjallConfigurer {
+public class ApiLoggingConfigurer {
 
     private final Log logger = LogFactory.getLog(getClass());
 
@@ -33,12 +33,11 @@ public class GjallConfigurer {
     private BeforeRequestLoggingHandler beforeRequestHandler;
     private AfterRequestLoggingHandler afterRequestHandler;
 
-    public static GjallConfigurer of(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
-        return new GjallConfigurer(beforeRequestHandler, afterRequestHandler);
+    public static ApiLoggingConfigurer of(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
+        return new ApiLoggingConfigurer(beforeRequestHandler, afterRequestHandler);
     }
 
-    private GjallConfigurer(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
-
+    private ApiLoggingConfigurer(BeforeRequestLoggingHandler beforeRequestHandler, AfterRequestLoggingHandler afterRequestHandler) {
         if (beforeRequestHandler == null && afterRequestHandler == null) {
             logger.info("No Request Handlers registered. tech.sollabs.gjall.handlers.SimpleBeforeRequestLoggingHandler will be add for default configuration");
             this.beforeRequestHandler = new SimpleBeforeRequestLoggingHandler();
@@ -48,22 +47,22 @@ public class GjallConfigurer {
         }
     }
 
-    GjallConfigurer setIncludeQueryString(boolean includeQueryString) {
+    ApiLoggingConfigurer setIncludeQueryString(boolean includeQueryString) {
         this.includeQueryString = includeQueryString;
         return this;
     }
 
-    GjallConfigurer setIncludeClientInfo(boolean includeClientInfo) {
+    ApiLoggingConfigurer setIncludeClientInfo(boolean includeClientInfo) {
         this.includeClientInfo = includeClientInfo;
         return this;
     }
 
-    GjallConfigurer setIncludeRequestHeaders(boolean includeRequestHeaders) {
+    ApiLoggingConfigurer setIncludeRequestHeaders(boolean includeRequestHeaders) {
         this.includeRequestHeaders = includeRequestHeaders;
         return this;
     }
 
-    GjallConfigurer setRequestPayloadLoggingSize(int requestPayloadLoggingSize) {
+    ApiLoggingConfigurer setRequestPayloadLoggingSize(int requestPayloadLoggingSize) {
         this.requestPayloadLoggingSize = requestPayloadLoggingSize;
 
         if (afterRequestHandler == null && isIncludeRequestPayload()) {
@@ -72,12 +71,12 @@ public class GjallConfigurer {
         return this;
     }
 
-    public GjallConfigurer setIncludeStatusCode(boolean includeStatusCode) {
+    public ApiLoggingConfigurer setIncludeStatusCode(boolean includeStatusCode) {
         this.includeStatusCode = includeStatusCode;
         return this;
     }
 
-    GjallConfigurer setIncludeResponseHeaders(boolean includeResponseHeaders) {
+    ApiLoggingConfigurer setIncludeResponseHeaders(boolean includeResponseHeaders) {
         this.includeResponseHeaders = includeResponseHeaders;
 
         if (afterRequestHandler == null && isIncludeRequestPayload()) {
@@ -86,7 +85,7 @@ public class GjallConfigurer {
         return this;
     }
 
-    GjallConfigurer setResponsePayloadLoggingSize(int responsePayloadLoggingSize) {
+    ApiLoggingConfigurer setResponsePayloadLoggingSize(int responsePayloadLoggingSize) {
         this.responsePayloadLoggingSize = responsePayloadLoggingSize;
 
         if (afterRequestHandler == null && isIncludeRequestPayload()) {
