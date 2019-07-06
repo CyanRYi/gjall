@@ -2,8 +2,6 @@ package tech.sollabs.gjall;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.UUID;
-
 /**
  * @author Cyan Raphael Yi
  * @since 0.1.0
