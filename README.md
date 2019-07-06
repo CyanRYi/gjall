@@ -17,33 +17,45 @@ but we need more information in our products.
 
 gjall defines its own goal - doing simply, get powerful API logging.
 
+### time goes by...
+But now, we can use httptrace endpoint of [actuator](https://docs.spring.io/spring-boot/docs/current/reference/html/production-ready-endpoints.html) over Spring Boot 2.   
+httptrace endpoint includes almost all of feature of gjall, and provide more convenient and stable.  
+
+We recommend gjall to users like below
+- still use Spring 4.2.x
+- can not use Spring Boot2 for various reasons
+- need hard request/response logging includes **BODY** for various reasons
+
+**but, always be careful to use BODY logging**
+
 ## usage
-1. @EnableGjall(it makes to work default setting) with @Configuration and add [Before/After]RequestLoggingHandler bean
-1. or make class extends GjallConfigurerAdapter to Spring Bean and configure like below
+1. add @EnableApiLogging(and add [Before/After]RequestLoggingHandler bean if you need)
+1. or make class extends ApiLoggingConfigurerAdapter to Spring Bean and configure like below
 
 ```java
 @Configuration
-public class GjallConfig extends GjallConfigurerAdapter {
-
+public class GjallConfig extends ApiLoggingConfigurerAdapter {
+                         
     @Override
-    public void configure(GjallConfigurerBuilder gjall) {
-        gjall
+    public void configure(ApiLoggingConfigurerBuilder configurerBuilder) {
+        configurerBuilder
                 .beforeHandler((httpServletRequest, apiLog) -> {
                     // implements Actions you want to do BEFORE REQUEST
-                    // OR object that implements  GjallBeforeRequestHandler - default SimpleGjallBeforeRequestHandler
+                    // OR make Spring Bean type of BeforeRequestLoggingHandler 
                 })
                 .afterHandler((httpServletRequest, httpServletResponse, apiLog) -> {
                     // implements Actions you want to do AFTER REQUEST
-                    // OR object that implements  GjallAfterRequestHandler - default SimpleGjallAfterRequestHandler
+                    // OR make Spring Bean type of AfterRequestLoggingHandler
                 })
                 .request()
-                    .includeHeaders(true)   // Include Request Header - default false
-                    .payloadSize(1000)      // Include Request Payload(Request Body). if set 0, payload not logging - default 0
-                    .and()
+                .includeHeaders(true)   // Include Request Header - default false
+                .payloadSize(1000)      // Include Request Payload(Request Body). if set 0, payload not logging - default 0
+            .and()
                 .response()
-                    .includeHeaders(true)   // Include Response Header - default false
-                    .payloadSize(3000)      // Include Response Payload(Response Body). if set 0, payload not logging - default 0
-                    .and()
+                .includeHeaders(true)   // Include Response Header - default false
+                .payloadSize(3000)      // Include Response Payload(Response Body). if set 0, payload not logging - default 0
+                .includeStatusCode(true)    // Include Response Status - default false
+            .and()
                 .includeClientInfo(true)    // enable user ip address, userId, session id Logging - default false
                 .includeQueryString(true);  // uri include query string - default true
     }
