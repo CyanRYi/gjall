@@ -5,13 +5,13 @@ import tech.sollabs.gjall.handlers.AfterRequestLoggingHandler;
 import tech.sollabs.gjall.handlers.BeforeRequestLoggingHandler;
 
 /**
- * Builder to make GjallConfigurer
+ * Builder to make ApiLoggingConfigurer
  *
  * @author Cyan Raphael Yi
  * @since 0.1.0
  * @see tech.sollabs.gjall.GjallRequestLoggingFilter
  */
-public class GjallConfigurerBuilder {
+public class ApiLoggingConfigurerBuilder {
 
     private boolean includeQueryString = true;
     private boolean includeClientInfo = false;
@@ -20,22 +20,22 @@ public class GjallConfigurerBuilder {
     private GjallRequestConfigurer requestConfigurer = new GjallRequestConfigurer();
     private GjallResponseConfigurer responseConfigurer = new GjallResponseConfigurer();
 
-    public GjallConfigurerBuilder includeQueryString(boolean includeQueryString) {
+    public ApiLoggingConfigurerBuilder includeQueryString(boolean includeQueryString) {
         this.includeQueryString = includeQueryString;
         return this;
     }
 
-    public GjallConfigurerBuilder includeClientInfo(boolean includeClientInfo) {
+    public ApiLoggingConfigurerBuilder includeClientInfo(boolean includeClientInfo) {
         this.includeClientInfo = includeClientInfo;
         return this;
     }
 
-    public GjallConfigurerBuilder beforeHandler(BeforeRequestLoggingHandler beforeHandler) {
+    public ApiLoggingConfigurerBuilder beforeHandler(BeforeRequestLoggingHandler beforeHandler) {
         this.beforeRequestHandler = beforeHandler;
         return this;
     }
 
-    public GjallConfigurerBuilder afterHandler(AfterRequestLoggingHandler afterHandler) {
+    public ApiLoggingConfigurerBuilder afterHandler(AfterRequestLoggingHandler afterHandler) {
         this.afterRequestHandler = afterHandler;
         return this;
     }
@@ -63,8 +63,8 @@ public class GjallConfigurerBuilder {
             return this;
         }
 
-        public GjallConfigurerBuilder and() {
-            return GjallConfigurerBuilder.this;
+        public ApiLoggingConfigurerBuilder and() {
+            return ApiLoggingConfigurerBuilder.this;
         }
     }
 
@@ -93,14 +93,14 @@ public class GjallConfigurerBuilder {
             return this;
         }
 
-        public GjallConfigurerBuilder and() {
-            return GjallConfigurerBuilder.this;
+        public ApiLoggingConfigurerBuilder and() {
+            return ApiLoggingConfigurerBuilder.this;
         }
     }
 
-    public GjallConfigurer build() {
+    public ApiLoggingConfigurer build() {
 
-        return GjallConfigurer.of(beforeRequestHandler, afterRequestHandler)
+        return ApiLoggingConfigurer.of(beforeRequestHandler, afterRequestHandler)
                 .setIncludeClientInfo(includeClientInfo)
                 .setIncludeQueryString(includeQueryString)
                 .setIncludeRequestHeaders(requestConfigurer.includeHeaders)

@@ -8,7 +8,7 @@ import org.springframework.web.filter.AbstractRequestLoggingFilter;
 import org.springframework.web.util.ContentCachingRequestWrapper;
 import org.springframework.web.util.ContentCachingResponseWrapper;
 import org.springframework.web.util.WebUtils;
-import tech.sollabs.gjall.configurer.GjallConfigurer;
+import tech.sollabs.gjall.configurer.ApiLoggingConfigurer;
 
 import javax.servlet.FilterChain;
 import javax.servlet.ServletException;
@@ -33,9 +33,9 @@ import java.util.UUID;
  */
 public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
 
-    private final GjallConfigurer configurer;
+    private final ApiLoggingConfigurer configurer;
 
-    public GjallRequestLoggingFilter(GjallConfigurer configurer) {
+    public GjallRequestLoggingFilter(ApiLoggingConfigurer configurer) {
         this.configurer = configurer;
     }
 
@@ -184,18 +184,25 @@ public class GjallRequestLoggingFilter extends AbstractRequestLoggingFilter {
                 .replaceAll("\t", "");
     }
 
+    /**
+     * @deprecated in Gjall, beforeRequest use <code>ApiLog</code> instead <code>String</code>.
+     * @see #beforeRequest(HttpServletRequest, ApiLog)
+     */
     @Deprecated
     protected void beforeRequest(HttpServletRequest httpServletRequest, String s) {
-        // No More Need this.
+        throw new UnsupportedOperationException("use instead beforeRequest(HttpServletRequest, ApiLog)");
     }
 
+    /**
+     * @deprecated in Gjall, afterRequest use <code>ApiLog</code> instead <code>String</code>.
+     * @see #afterRequest(HttpServletRequest, HttpServletResponse, ApiLog)
+     */
     @Deprecated
     protected void afterRequest(HttpServletRequest httpServletRequest, String s) {
-        // No More Need this.
+        throw new UnsupportedOperationException("use instead afterRequest(HttpServletRequest, HttpServletResponse, ApiLog)");
     }
 
-    private UUID createRequestLogId() {
-
+    protected Object createRequestLogId() {
         return UUID.randomUUID();
     }
 

@@ -2,8 +2,6 @@ package tech.sollabs.gjall;
 
 import org.springframework.http.HttpStatus;
 
-import java.util.UUID;
-
 /**
  * @author Cyan Raphael Yi
  * @since 0.1.0
@@ -13,7 +11,7 @@ import java.util.UUID;
  */
 public class ApiLog {
 
-    private final UUID id;
+    private final Object id;
     private String uri;
     private String method;
     private HttpStatus httpStatus = null;
@@ -25,11 +23,11 @@ public class ApiLog {
     private long requestAcceptedAt;
     private long requestFinishedAt;
 
-    public ApiLog(UUID id) {
+    public ApiLog(Object id) {
         this.id = id;
     }
 
-    public UUID getId() {
+    public Object getId() {
         return id;
     }
 

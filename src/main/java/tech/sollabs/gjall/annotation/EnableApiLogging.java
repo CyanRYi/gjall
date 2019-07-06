@@ -9,7 +9,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
- * Enable Gjall default configuration
+ * Enable Gjall configuration for API logging
  *
  * @author Cyan Raphael Yi
  * @since 0.1.0
@@ -18,5 +18,5 @@ import java.lang.annotation.Target;
 @Retention(RetentionPolicy.RUNTIME)
 @Target(ElementType.TYPE)
 @Import(GjallConfiguration.class)
-public @interface EnableGjall {
+public @interface EnableApiLogging {
 }
