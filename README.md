@@ -62,6 +62,20 @@ public class GjallConfig extends ApiLoggingConfigurerAdapter {
 }
 ```
 
+### Use into your project
+- maven
+```xml
+ <dependency>
+     <groupId>tech.sollabs</groupId>
+     <artifactId>gjall</artifactId>
+     <version>1.0.0-RELEASE</version>
+ </dependency>
+```
+- gradle
+```
+compile group: 'tech.sollabs', name: 'gjall', version: '1.0.0-RELEASE'
+```
+
 ## Source Code Repository
 (https://github.com/CyanRYi/gjall)
 
